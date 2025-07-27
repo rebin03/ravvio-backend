@@ -2,7 +2,7 @@ from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Category, Product, ProductImage, ProductAttribute
+from .models import Category, Product, ProductImage, ProductAttribute, ProductAttributeItem
 from .serializers import (
     CategorySerializer,
     ProductSerializer,
@@ -10,17 +10,36 @@ from .serializers import (
     ProductImageSerializer,
     ProductAttributeSerializer
 )
+from .swagger import (
+    category_schema, 
+    attribute_schema, 
+    product_schema,
+    bulk_create_schema,
+    search_or_create_schema,
+    add_images_schema,
+    update_image_order_schema,
+    update_attributes_schema
+)
 
+@category_schema
 class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    API endpoints for managing product categories.
+    """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+@attribute_schema
 class ProductAttributeViewSet(viewsets.ModelViewSet):
+    """
+    API endpoints for managing product attributes.
+    """
     queryset = ProductAttribute.objects.all()
     serializer_class = ProductAttributeSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name']
     
+    @bulk_create_schema
     @action(detail=False, methods=['post'])
     def bulk_create(self, request):
         """Create multiple attributes at once."""
@@ -33,6 +52,7 @@ class ProductAttributeViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(attributes, many=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+    @search_or_create_schema
     @action(detail=False, methods=['get'])
     def search_or_create(self, request):
         """Search for attributes by name, returns matches or creates if none found."""
@@ -53,7 +73,11 @@ class ProductAttributeViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(attributes, many=True)
         return Response(serializer.data)
     
+@product_schema
 class ProductViewSet(viewsets.ModelViewSet):
+    """
+    API endpoints for managing products.
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -66,8 +90,10 @@ class ProductViewSet(viewsets.ModelViewSet):
             return ProductDetailSerializer
         return ProductSerializer
     
+    @add_images_schema
     @action(detail=True, methods=['post'])
     def add_images(self, request, pk=None):
+        """Add one or more images to a product."""
         product = self.get_object()
         images_data = request.FILES.getlist('images')
         order = ProductImage.objects.filter(product=product).count()
@@ -83,8 +109,10 @@ class ProductViewSet(viewsets.ModelViewSet):
         serializer = ProductDetailSerializer(product)
         return Response(serializer.data)
     
+    @update_image_order_schema
     @action(detail=True, methods=['post'])
     def update_image_order(self, request, pk=None):
+        """Update the display order of product images."""
         product = self.get_object()
         image_orders = request.data.get('image_orders', [])
         
@@ -103,6 +131,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         serializer = ProductDetailSerializer(product)
         return Response(serializer.data)
     
+    @update_attributes_schema
     @action(detail=True, methods=['post'])
     def update_attributes(self, request, pk=None):
         """Update product attributes in bulk."""

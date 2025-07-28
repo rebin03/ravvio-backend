@@ -126,7 +126,7 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "https://ravvio-backend.onrender.com",
-    "https://api.ravvio.net/",
+    "https://api.ravvio.net",
 ]
 
 # Internationalization

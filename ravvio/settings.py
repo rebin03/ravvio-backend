@@ -16,7 +16,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = ['localhost', 'ravvio-backend.onrender.com', 'https://api.ravvio.net/']
+ALLOWED_HOSTS = ['localhost', 'ravvio-backend.onrender.com', 'api.ravvio.net']
 
 # Application definition
 

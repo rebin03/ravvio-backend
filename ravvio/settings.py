@@ -16,7 +16,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = ['localhost', 'ravvio-backend.onrender.com']
+ALLOWED_HOSTS = ['localhost', 'ravvio-backend.onrender.com', 'https://api.ravvio.net/']
 
 # Application definition
 
@@ -118,7 +118,7 @@ SPECTACULAR_SETTINGS = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  
+    "http://localhost:3000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -126,6 +126,7 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "https://ravvio-backend.onrender.com",
+    "https://api.ravvio.net/",
 ]
 
 # Internationalization

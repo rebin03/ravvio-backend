@@ -120,6 +120,7 @@ SPECTACULAR_SETTINGS = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://ravvio.net",
+    "https://www.ravvio.net",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

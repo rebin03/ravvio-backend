@@ -10,6 +10,7 @@ from .serializers import (
     ProductImageSerializer,
     ProductAttributeSerializer
 )
+from .pagination import ProductPagination
 from .swagger import (
     category_schema, 
     attribute_schema, 
@@ -80,6 +81,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    pagination_class = ProductPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category_obj']
     search_fields = ['name', 'description']
